@@ -14,10 +14,10 @@ const Home = () => {
     <main>
       <h1>Trending today</h1>
       <ul>
-        {trending.map(({ id, title, original_title }) => {
+        {trending.map(({ id, title, original_title,release_date }) => {
           return (
             <li key={id}>
-              <Link to={generatePath(PAGE_NAMES.movie,{id: id})}>{title ?? original_title}</Link>
+              <Link to={generatePath(PAGE_NAMES.movie,{id: id})}>{title ?? original_title} ({release_date.slice(0,4)??''})</Link>
             </li>
           );
         })}
