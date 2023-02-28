@@ -1,6 +1,6 @@
  import axios from "axios";
  const BASE_URL="https://api.themoviedb.org/3/";
- export const BASE_IMG_URL="https://image.tmdb.org/t/p/w500";
+ export const BASE_IMG_URL="https://image.tmdb.org/t/p/w220_and_h330_face/";
  const API_KEY="?api_key=68bc8f2587d307cdd95fbf9f8320ddc0";
 
  export const fetchTrending = () =>{

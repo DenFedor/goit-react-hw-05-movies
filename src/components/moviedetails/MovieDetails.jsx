@@ -1,17 +1,26 @@
-import { fetchDetailedById,BASE_IMG_URL } from 'api/getApi';
-import { useEffect, useState,Suspense } from 'react';
-import { useParams,generatePath,Outlet,Link,useLocation } from 'react-router-dom';
+import { fetchDetailedById, BASE_IMG_URL } from 'api/getApi';
+import { useEffect, useState, Suspense } from 'react';
+import { useParams, Outlet, useLocation } from 'react-router-dom';
 import { PAGE_NAMES } from 'router/paths';
-import { StyledLink,StyledNavLink,List } from './MovieDetails.styled';
+import {
+  StyledLink,
+  StyledNavLink,
+  List,
+  Container,
+  MovieDetailsWrap,
+  Description,
+  MoviePoster,
+  GenresText,
+} from './MovieDetails.styled';
 import noImagePoster from '../../images/no_image_poster.png';
 
 const MovieDetails = () => {
   const { id } = useParams();
   const [movie, setMovie] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [status, setStatus] =useState('idle');
-  const location=useLocation();
-  const getBack=location.state?.from ?? PAGE_NAMES.home;
+  const [status, setStatus] = useState('idle');
+  const location = useLocation();
+  const getBack = location.state?.from ?? PAGE_NAMES.home;
   useEffect(() => {
     setIsLoading(true);
     setStatus('loading');
@@ -20,57 +29,84 @@ const MovieDetails = () => {
         setMovie(data);
         setStatus('fulfilled');
       })
-      .catch((error)=>{setStatus('error');console.log(error)})
+      .catch(error => {
+        setStatus('error');
+        console.log(error);
+      })
       .finally(() => {
         setIsLoading(false);
       });
   }, [id]);
 
-  if (status==='idle'|| isLoading) {
+  if (status === 'idle' || isLoading) {
     return <>Loading...</>;
   }
-  if (status==='error') {
+  if (status === 'error') {
     return <>Occured an error</>;
   }
-  const { backdrop_path, title, genres, vote_average, overview } = movie;
+  const { backdrop_path, title, genres, vote_average, overview,release_date } = movie;
   const genresString = genres
     .map(item => {
       return item.name;
     })
     .join(' ');
+    const releaseYear=new Date(release_date).getFullYear()?? '';
   return (
-    <>
+    <Container>
       <div>
-        <Link to={getBack}>Go back</Link>
+        <StyledLink to={getBack}>Go back</StyledLink>
       </div>
-      <img src={backdrop_path!=null ? BASE_IMG_URL+backdrop_path : noImagePoster} alt={title} />
-      <div>
-        <h2>{title}</h2>
-        <p>User score: {Math.round(vote_average * 10)}%</p>
-        <h3>Overview</h3>
-        <p>{overview}</p>
-        <h3>Genres</h3>
+      <MovieDetailsWrap>
+        <MoviePoster
+          src={
+            backdrop_path != null ? BASE_IMG_URL + backdrop_path : noImagePoster
+          }
+          alt={title}
+        />
+        <div>
+          <h2>{title} ({releaseYear})</h2>
+          <Description>
+            User score: <span>{Math.round(vote_average * 10)}%</span>
+          </Description>
+          <h3>Overview</h3>
+          <Description>{overview}</Description>
+          <h3>Genres</h3>
+          <GenresText>{genresString ?? 'Genres are not available'}</GenresText>
+        </div>
+      </MovieDetailsWrap>
 
-        <p>{genresString ?? 'Genres are not available'}</p>
-      </div>
       <div>
-        <p>Additional information</p>
+        <h3>Additional information</h3>
         <List>
           <li>
-            <StyledNavLink to={generatePath(PAGE_NAMES.cast,{id: id})} replace>Cast</StyledNavLink>
+            <StyledNavLink
+              to={PAGE_NAMES.cast}
+              replace
+              state={{ from: getBack }}
+            >
+              Cast
+            </StyledNavLink>
           </li>
           <li>
-          <StyledNavLink to={generatePath(PAGE_NAMES.reviews,{id: id})} replace>Reviews</StyledNavLink>
+            <StyledNavLink
+              to={PAGE_NAMES.reviews}
+              replace
+              state={{ from: getBack }}
+            >
+              Reviews
+            </StyledNavLink>
           </li>
           <li>
-            <StyledLink to='' replace>Hide All</StyledLink>
+            <StyledLink to="" replace state={{ from: getBack }}>
+              Hide All
+            </StyledLink>
           </li>
         </List>
         <Suspense fallback={<div>Loading subpage...</div>}>
-        <Outlet />
-      </Suspense>
+          <Outlet />
+        </Suspense>
       </div>
-    </>
+    </Container>
   );
 };
 export default MovieDetails;
