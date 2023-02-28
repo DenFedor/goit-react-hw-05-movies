@@ -1,6 +1,6 @@
 import { fetchDetailedById,BASE_IMG_URL } from 'api/getApi';
 import { useEffect, useState,Suspense } from 'react';
-import { useParams,generatePath,Outlet } from 'react-router-dom';
+import { useParams,generatePath,Outlet,Link } from 'react-router-dom';
 import { PAGE_NAMES } from 'router/paths';
 import { StyledLink,List } from './MovieDetails.styled';
 import noImagePoster from '../../images/no_image_poster.png';
@@ -39,7 +39,7 @@ const MovieDetails = () => {
   return (
     <>
       <div>
-        <a href="/">Go back</a>
+        <Link to={PAGE_NAMES.home}>Go back</Link>
       </div>
       <img src={backdrop_path!=null ? BASE_IMG_URL+backdrop_path : noImagePoster} alt={title} />
       <div>

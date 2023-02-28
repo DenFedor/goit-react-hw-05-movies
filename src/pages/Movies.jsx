@@ -60,7 +60,7 @@ export const Movies = () => {
           {movies.map(({ id, title, original_title }) => {
             return (
               <li key={id}>
-                <Link to={generatePath(PAGE_NAMES.movie ,{ id: id })}>
+                <Link to={generatePath(PAGE_NAMES.id, { id: id })}>
                   {title ?? original_title}
                 </Link>
               </li>
