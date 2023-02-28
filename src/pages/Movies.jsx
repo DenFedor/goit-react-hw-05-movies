@@ -1,4 +1,4 @@
-import { useSearchParams, Link, generatePath } from 'react-router-dom';
+import { useSearchParams, Link, generatePath,useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { fetchMovieByName } from 'api/getApi';
 import { PAGE_NAMES } from 'router/paths';
@@ -7,8 +7,8 @@ export const Movies = () => {
   const [movies, setMovies] = useState([]);
   const query = searchParams.get('query');
   const [status, setStatus] = useState('idle');
+  const location = useLocation();
   useEffect(() => {
-    console.log(query);
     if (query === '' || query == null) {return};
     setStatus('loading');
     fetchMovieByName(query)
@@ -60,7 +60,7 @@ export const Movies = () => {
           {movies.map(({ id, title, original_title }) => {
             return (
               <li key={id}>
-                <Link to={generatePath(PAGE_NAMES.id, { id: id })}>
+                <Link to={generatePath(PAGE_NAMES.id, { id: id })} state={{ from: location }}>
                   {title ?? original_title}
                 </Link>
               </li>
