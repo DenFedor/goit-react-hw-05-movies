@@ -2,7 +2,7 @@ import { fetchDetailedById,BASE_IMG_URL } from 'api/getApi';
 import { useEffect, useState,Suspense } from 'react';
 import { useParams,generatePath,Outlet,Link } from 'react-router-dom';
 import { PAGE_NAMES } from 'router/paths';
-import { StyledLink,List } from './MovieDetails.styled';
+import { StyledLink,StyledNavLink,List } from './MovieDetails.styled';
 import noImagePoster from '../../images/no_image_poster.png';
 
 const MovieDetails = () => {
@@ -55,13 +55,13 @@ const MovieDetails = () => {
         <p>Additional information</p>
         <List>
           <li>
-            <StyledLink to={generatePath(PAGE_NAMES.cast,{id: id})} replace>Cast</StyledLink>
+            <StyledNavLink to={generatePath(PAGE_NAMES.cast,{id: id})} replace>Cast</StyledNavLink>
           </li>
           <li>
-          <StyledLink to={generatePath(PAGE_NAMES.reviews,{id: id})} replace>Reviews</StyledLink>
+          <StyledNavLink to={generatePath(PAGE_NAMES.reviews,{id: id})} replace>Reviews</StyledNavLink>
           </li>
           <li>
-            <StyledLink to={generatePath(PAGE_NAMES.movie,{id: id})} replace>Hide All</StyledLink>
+            <StyledLink to='' replace>Hide All</StyledLink>
           </li>
         </List>
         <Suspense fallback={<div>Loading subpage...</div>}>
